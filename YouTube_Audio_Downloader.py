@@ -1,3 +1,4 @@
+import os
 def YouTube_Audio_Downloader():
 	Downloading = True
 	while Downloading==True:
@@ -13,8 +14,18 @@ def YouTube_Audio_Downloader():
 				print("Invalid input! Please try again!")
 		if Amount == "1":
 			URL = YouTube(input("Enter the URL link of the video whose audio you want to download: "))
-			print("Downloading: {0}".format(URL.title))
-			Type = URL.streams.filter(type="audio").first().download()
+			streams = URL.streams
+			audio_stream = streams.filter(only_audio=True)
+			if(len(audio_stream)):
+				print("Downloding audio")
+				stream = audio_stream.first()
+				stream.download()
+				filePath = stream.get_file_path()
+				[filename, extension] = os.path.splitext(filePath)
+				os.rename(filePath, filename + '.mp3')
+			else:
+				print("No audio streams found. Downloding in video format.")
+				streams.first().download()
 			print("Your download is complete!")
 		else:
 			URL = Playlist(input("Enter the URL link of the playlist whose audio you want to download: "))
