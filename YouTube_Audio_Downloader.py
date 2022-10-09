@@ -1,3 +1,4 @@
+import os
 def YouTube_Audio_Downloader():
 	Downloading = True
 	while Downloading==True:
@@ -12,16 +13,38 @@ def YouTube_Audio_Downloader():
 			else:
 				print("Invalid input! Please try again!")
 		if Amount == "1":
-			URL = YouTube(input("Enter the URL link of the video whose audio you want to download: "))
-			print("Downloading: {0}".format(URL.title))
-			Type = URL.streams.filter(type="audio").first().download()
-			print("Your download is complete!")
+			try:
+				URL = YouTube(input("Enter the URL link of the video whose audio you want to download: "))
+				streams = URL.streams
+				audio_stream = streams.filter(only_audio=True)
+				if(len(audio_stream)):
+					stream = audio_stream.first()
+					stream.download()
+					filePath = stream.get_file_path()
+					[filename, extension] = os.path.splitext(filePath)
+					os.rename(filePath, filename + '.mp3')
+				else:
+					streams.first().download()
+				print("Successfully downloaded {0}".format(URL.title))
+			except:
+				print("Failed to download {0}".format(URL.title))
 		else:
 			URL = Playlist(input("Enter the URL link of the playlist whose audio you want to download: "))
-			print("Downloading: {0}".format(URL.title))
 			for video in URL.videos:
-				video.streams.filter(type="audio").first().download()
-			print("Your download is complete!")
+				try:
+					streams = video.streams
+					audio_stream = streams.filter(only_audio=True)
+					if(len(audio_stream)):
+						stream = audio_stream.first()
+						stream.download()
+						filePath = stream.get_file_path()
+						[filename, extension] = os.path.splitext(filePath)
+						os.rename(filePath, filename + '.mp3')
+					else:
+						streams.first().download()
+					print("Successfully downloaded {0}".format(video.title))
+				except:
+					print("Failed to download {0}".format(video.title))
 		flag = True
 		while flag:
 			Again=input("Do you want to download again? (y/n)").lower()
