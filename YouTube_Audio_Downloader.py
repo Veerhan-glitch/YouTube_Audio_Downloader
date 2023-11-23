@@ -1,17 +1,15 @@
 import os
+from pytube import YouTube
+from pytube import Playlist
+
 def YouTube_Audio_Downloader():
 	Downloading = True
 	program = True
 	while program == True:
-		import os
 		print("\nWelcome to YouTube Audio Downloader! \n")
 		save_path = input("Enter the path of the folder where you want to download the file:")
 		if os.path.exists(save_path):
-			while Downloading==True:
-				from pytube import YouTube
-				from  pytube import Playlist
-				import os
-							
+			while Downloading==True:			
 				flag = True
 				while flag == True:
 					Amount = input("\nFor only one video press 1 while for whole playlist press 2: ")
@@ -22,13 +20,14 @@ def YouTube_Audio_Downloader():
 				if Amount == "1":
 					URL = YouTube(input("\nEnter the URL link of the video whose audio you want to download: "))
 					print("Downloading: {0}".format(URL.title))
-					Type = URL.streams.filter(type="audio").first().download(save_path)
+					# get highest quality
+					URL.streams.filter(only_audio=True, file_extension='mp4').order_by('abr').desc().first().download(save_path)				
 					print("Your download is complete!")
 				else:
 					URL = Playlist(input("Enter the URL link of the playlist whose audio you want to download: "))
 					print("Downloading: {0}".format(URL.title))
 					for video in URL.videos:
-						video.streams.filter(type="audio").first().download(save_path)
+						video.streams.filter(only_audio=True, file_extension='mp4').order_by('abr').desc().first().download(save_path)				
 					print("Your download is complete!")
 				flag = True
 				while flag:
@@ -44,4 +43,5 @@ def YouTube_Audio_Downloader():
 						print("Invalid input! Please try again!")
 		else:
 			print("The entered path does not exist. Please try again with a valid path!")
+
 YouTube_Audio_Downloader()
