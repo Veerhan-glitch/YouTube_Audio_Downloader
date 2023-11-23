@@ -4,5 +4,5 @@
 * third you paste your link.
 
 - this will be better soon...
-### dont forget start please ;D
+### dont forget star please ;D
 ##   [CISCO_X](https://github.com/xciscox)
