@@ -3,5 +3,4 @@
 * remember to set API_KEY of your telegram bot in case you want to use it!
 
 - this will be better soon...
-### dont forget star please ;D
-##   [CISCO_X](https://github.com/xciscox)
+### dont forget star please ;
